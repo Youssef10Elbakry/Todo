@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: buildAppBar(),
       bottomNavigationBar: buildBottomNav(),
-      body: currentSelectedTabIndex == 0 ? const ListTab() : const SettingsTab(),
+      body: currentSelectedTabIndex == 0 ? ListTab() : const SettingsTab(),
       floatingActionButton: buildFab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
@@ -33,16 +33,16 @@ class _HomeScreenState extends State<HomeScreen> {
             isScrollControlled: true,
             builder: (_) => Padding(
               padding: MediaQuery.of(context).viewInsets,
-              child: const AddBottomSheet(),
+              child: AddBottomSheet(),
             ));
       },
         child: const Icon(Icons.add),);
 
   Widget buildBottomNav() =>
-      BottomAppBar(
+      BottomAppBar( // This class is used to control the interaction between a nav. bar and a floating button
         notchMargin: 8,
         shape: const CircularNotchedRectangle(),
-        clipBehavior: Clip.hardEdge,
+        clipBehavior: Clip.hardEdge,  //To cut a part of the nav. bar to take the circular shape of the floating button
         child: BottomNavigationBar(
             onTap: (index){
               currentSelectedTabIndex = index;
@@ -50,8 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             currentIndex: currentSelectedTabIndex,
             items: const [
-              const BottomNavigationBarItem(icon: Icon(Icons.menu), label: ""),
-              const BottomNavigationBarItem(icon: Icon(Icons.settings), label: ""),
+              BottomNavigationBarItem(icon: Icon(Icons.menu), label: ""),
+              BottomNavigationBarItem(icon: Icon(Icons.settings), label: ""),
             ]),
       );
 

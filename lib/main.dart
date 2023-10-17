@@ -1,10 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/ui/providers/list_provider.dart';
 import 'package:todo_app/ui/screens/home/home_screen.dart';
 import 'package:todo_app/ui/screens/splash/splash_screen.dart';
 import 'package:todo_app/ui/utilities/app_theme.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  // FirebaseFirestore.instance.settings =
+  //     Settings(cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
+  await FirebaseFirestore.instance.enableNetwork();
+  runApp(ChangeNotifierProvider(
+    create: (_)=>ListProvider(),
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

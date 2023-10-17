@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/ui/providers/list_provider.dart';
 
+import '../../../../../models/todo_data_model.dart';
 import '../../../../utilities/app_colors.dart';
 import '../../../../utilities/app_theme.dart';
 
 class TodoWidget extends StatelessWidget {
-  const TodoWidget({super.key});
 
+  TodoDm todo;
+  Function refreshList;
+  int todoIndex;
+  TodoWidget({super.key, required this.todo, required this.refreshList, required this.todoIndex});
+  late ListProvider provider;
   @override
   Widget build(BuildContext context) {
+    provider = Provider.of(context);
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(24),
           color: AppColors.white),
       margin: const EdgeInsets.symmetric(vertical: 22, horizontal: 30),
       child: Slidable(
         startActionPane: ActionPane(
-          motion: StretchMotion(),
+          motion: const StretchMotion(),
           extentRatio: .25,
           children: [
             SlidableAction(
-              onPressed: (_){},
+              onPressed: (_){
+                refreshList(todo.id, todoIndex);
+              },
               backgroundColor: Colors.red,
               foregroundColor: AppColors.white,
               icon: Icons.delete,
@@ -34,13 +44,13 @@ class TodoWidget extends StatelessWidget {
             children: [
               const VerticalDivider(),
               const SizedBox(width: 12,),
-              const Expanded(
+               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text("Play basketball", style: AppTheme.taskTitleTextStyle,),
-                    Text("Description",
+                    Text(todo.title, style: AppTheme.taskTitleTextStyle,),
+                    Text(todo.description,
                       textAlign: TextAlign.start,
                       style: AppTheme.taskDescriptionTextStyle,)
                   ],
@@ -59,4 +69,5 @@ class TodoWidget extends StatelessWidget {
       ),
     );
   }
+
 }

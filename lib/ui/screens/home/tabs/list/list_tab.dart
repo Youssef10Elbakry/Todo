@@ -1,14 +1,35 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/ui/providers/list_provider.dart';
 import 'package:todo_app/ui/screens/home/tabs/list/todo_widget.dart';
-
 import '../../../../utilities/app_colors.dart';
 
-class ListTab extends StatelessWidget {
-  const ListTab({super.key});
+class ListTab extends StatefulWidget {
+
+  ListTab({super.key});
+
+  @override
+  State<ListTab> createState() => _ListTabState();
+}
+
+class _ListTabState extends State<ListTab> {
+  late ListProvider provider;
+
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      provider.refreshTodosList();
+    } );
+  }
 
   @override
   Widget build(BuildContext context) {
+    provider = Provider.of(context);
+   //  if(provider.todos.isEmpty){
+   //   provider.refreshTodosList();
+   //   print("z");
+   // }
     return Column(
       children: [
         SizedBox(
@@ -26,10 +47,13 @@ class ListTab extends StatelessWidget {
                 ],
               ),
               CalendarTimeline(
-                initialDate: DateTime.now(),
-                firstDate: DateTime.now().subtract(Duration(days: 365)),
-                lastDate: DateTime.now().add(Duration(days: 365)),
-                onDateSelected: (date) => print(date.weekday),
+                initialDate: provider.selectedDate,
+                firstDate: DateTime.now().subtract(const Duration(days: 365)),
+                lastDate: DateTime.now().add(const Duration(days: 365)),
+                onDateSelected: (date){
+                  provider.selectedDate = date;
+                  provider.refreshTodosList();
+                },
                 leftMargin: 20,
                 monthColor: AppColors.white,
                 dayColor: AppColors.primary,
@@ -42,9 +66,14 @@ class ListTab extends StatelessWidget {
         ),
         Expanded(
           child: ListView.builder(
-              itemCount: 10, itemBuilder: (context, index) => const TodoWidget()),
+              itemCount: provider.todos.length, itemBuilder: (context, index) => TodoWidget(todoIndex: index, refreshList: deleteSpecificTask, todo: provider.todos[index],)),
         ),
       ],
     );
   }
+
+  void deleteSpecificTask(String todoId, int todoIndex){
+    provider.deleteTodoWidget(todoId, todoIndex);
+  }
+
 }

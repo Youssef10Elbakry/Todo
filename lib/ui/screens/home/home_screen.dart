@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/ui/screens/home/tabs/list/list_tab.dart';
 import 'package:todo_app/ui/screens/home/tabs/settings/settings_tab.dart';
 
-import '../bottom_sheets/add_bottom_sheet.dart';
+import '../bottom_sheets/bottom_sheet.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
             isScrollControlled: true,
             builder: (_) => Padding(
               padding: MediaQuery.of(context).viewInsets,
-              child: AddBottomSheet(),
+              child: AddBottomSheet(titleTextFieldText: "", descriptionTextFieldText: "", buttonText: "Add", documentId: "", selectedTime: DateTime.now(),),
             ));
       },
         child: const Icon(Icons.add),);
